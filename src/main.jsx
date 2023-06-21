@@ -7,6 +7,10 @@ import Home from './pages/Home'
 import AddCoffee from './pages/addCoffee/AddCoffee'
 import UpdateCoffee from './pages/UpdateCoffee'
 import SingleItem from './pages/SingleItem'
+import Login from './pages/Login'
+import Registration from './pages/Registration'
+import AuthProvider from './Provider/AuthProvider'
+import PrivateRoutes from './routes/PrivateRoutes'
 // import Product from './components/products/Product'
 
 
@@ -18,7 +22,7 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
-        loader: () => fetch('http://localhost:5000/addCoffee')
+        // loader: () => fetch('https://espresso-server-site-mehedihasanweb.vercel.app/addCoffee')
       }
     ]
   },
@@ -26,25 +30,31 @@ const router = createBrowserRouter([
     path: 'addCoffee',
     element: <AddCoffee />
   },
-  // {
-  //   path: 'updateCoffee',
-  //   element: <UpdateCoffee />
-  // },
+  {
+    path: 'login',
+    element: <Login />
+  },
+  {
+    path: 'registration',
+    element: <Registration />
+  },
   {
     path: 'updateCoffee/:id',
-    element: <UpdateCoffee />,
-    loader: ({params}) => fetch(`http://localhost:5000/addCoffee/${params.id}`)
+    element: <PrivateRoutes><UpdateCoffee /></PrivateRoutes>,
+    loader: ({ params }) => fetch(`https://espresso-server-site-mehedihasanweb.vercel.app/addCoffee/${params.id}`)
   },
   {
     path: 'singlePage/:id',
-    element: <SingleItem />,
-    loader: ({params}) => fetch(`http://localhost:5000/addCoffee/${params.id}`)
+    element:<PrivateRoutes> <SingleItem /></PrivateRoutes>,
+    loader: ({ params }) => fetch(`https://espresso-server-site-mehedihasanweb.vercel.app/addCoffee/${params.id}`)
   }
 ])
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>,
 )

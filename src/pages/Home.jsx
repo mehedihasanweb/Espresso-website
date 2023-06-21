@@ -6,16 +6,32 @@ import grades from '../assets/icons/3.png'
 import roasting from '../assets/icons/4.png'
 import Product from '../components/products/Product'
 import Insta from './Insta'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import CoffeeCard from '../components/coffeeCard/CoffeeCard'
 import Footer from '../shared/Footer'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import MainFooter from '../shared/MainFooter'
 
 const Home = () => {
     const loadedCoffeeData = useLoaderData()
-    const [coffees, setCoffees] = useState(loadedCoffeeData)
     // console.log(loadedCoffeeData);
+    const [coffees, setCoffees] = useState([])
+    // console.log(loadedCoffeeData);
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+        fetch('https://espresso-server-site-mehedihasanweb.vercel.app/addCoffee')
+        .then(res => res.json())
+        .then(data => {
+            if(!data.error){
+                setCoffees(data)
+            }
+            else{
+                navigate('/')
+            }
+        })
+    },[navigate])
+
     return (
         <>
             <div className="banner flex items-center">
